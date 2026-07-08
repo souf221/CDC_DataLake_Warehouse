@@ -141,8 +141,11 @@ docker compose ps
 | Prometheus | http://localhost:9090 | — |
 | Metabase | http://localhost:3001 | (setup initial) |
 | **KPI Dashboard** | **http://localhost:8500** | **Front KPI Gold (auto)** |
-| Spark Master | http://localhost:8080 | — |
+| **Spark Master UI** | **http://localhost:8080** | Interface web (workers, jobs) |
+| Spark cluster (RPC) | `spark://localhost:7077` | Protocole cluster uniquement — **pas d'URL navigateur** |
 | PostgreSQL | localhost:5432 | cdc_user / cdc_password |
+
+> **Spark : ne pas ouvrir le port 7077 dans le navigateur.** Ce port sert à la communication interne du cluster (`spark://`). L'interface web est sur le **port 8080**.
 
 ## Modes d'exécution
 
@@ -311,6 +314,7 @@ python -m ingestion.extract
 |----------|----------|
 | MinIO bucket manquant | `docker compose up minio-init` |
 | Airflow DAG non visible | Vérifier `dags/` monté, redémarrer scheduler |
+| Spark `ERR_EMPTY_RESPONSE` sur `:7077` | Utiliser **http://localhost:8080** (UI web). Le port 7077 n'est pas HTTP. |
 | Erreur Spark S3A | Vérifier credentials MinIO dans `.env` |
 | API CDC timeout | Mode `full` : vérifier `CDC_APP_TOKEN`, pagination keyset dans `configs/settings.yaml` |
 | Python 3.13 / pip échoue | Utiliser `.\scripts\run_pipeline_docker.ps1` (Python 3.11 dans Docker) |
