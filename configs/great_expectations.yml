@@ -1,0 +1,45 @@
+# Great Expectations configuration
+# Suite et checkpoint pour la couche Silver
+
+config_version: 3.0
+
+datasources:
+  cdc_silver:
+    class_name: Datasource
+    execution_engine:
+      class_name: PandasExecutionEngine
+    data_connectors:
+      default_runtime_data_connector:
+        class_name: RuntimeDataConnector
+        assets:
+          silver_data:
+            batch_identifiers: ["dataset"]
+
+expectations_store_name: expectations_store
+validations_store_name: validations_store
+evaluation_parameter_store_name: evaluation_parameter_store
+
+stores:
+  expectations_store:
+    class_name: ExpectationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: ../data/quality_results/expectations/
+
+  validations_store:
+    class_name: ValidationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: ../data/quality_results/validations/
+
+  evaluation_parameter_store:
+    class_name: EvaluationParameterStore
+
+data_docs_sites:
+  local_site:
+    class_name: SiteBuilder
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: ../data/quality_results/data_docs/
+    site_index_builder:
+      class_name: DefaultSiteIndexBuilder

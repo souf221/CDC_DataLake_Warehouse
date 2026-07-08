@@ -1,0 +1,16 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir prometheus-client python-dotenv pyyaml
+
+COPY src/monitoring/ ./src/monitoring/
+COPY src/utils/ ./src/utils/
+
+ENV PYTHONPATH=/app/src
+ENV METRICS_PORT=8000
+
+EXPOSE 8000
+
+CMD ["python", "-m", "monitoring.prometheus_exporter"]

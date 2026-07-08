@@ -1,0 +1,80 @@
+# Configuration des datasets CDC (Socrata Open Data)
+# Documentation : https://dev.socrata.com/
+# Dernière vérification : juillet 2026 — remplace les datasets archivés (404)
+
+datasets:
+  covid_cases_weekly_state:
+    id: "pwn4-m3yp"
+    name: "Weekly COVID-19 Cases and Deaths by State"
+    format: csv
+    order_column: ":id"
+    description: "Cas et décès COVID-19 hebdomadaires par État (archivé, API OK)"
+    columns:
+      - start_date
+      - end_date
+      - state
+      - tot_cases
+      - new_cases
+      - tot_deaths
+      - new_deaths
+
+  covid_vaccinations_jurisdiction:
+    id: "unsk-b7fc"
+    name: "COVID-19 Vaccinations by Jurisdiction"
+    format: csv
+    order_column: ":id"
+    description: "Vaccinations COVID-19 par juridiction"
+    columns:
+      - date
+      - location
+      - administered
+      - administered_dose1_recip
+      - series_complete_yes
+
+  provisional_flu_pneumonia_covid_deaths:
+    id: "ynw2-4viq"
+    name: "Provisional Death Counts Flu/Pneumonia/COVID"
+    format: csv
+    order_column: ":id"
+    description: "Décès provisoires grippe, pneumonie et COVID-19"
+    columns:
+      - week_ending_date
+      - jurisdiction
+      - covid_19_deaths
+      - pneumonia_deaths
+      - influenza_deaths
+
+  flu_vaccination_coverage:
+    id: "vh55-3he6"
+    name: "Influenza Vaccination Coverage"
+    format: csv
+    order_column: ":id"
+    description: "Couverture vaccinale grippe (6+ mois)"
+    columns:
+      - year_season
+      - month
+      - geography
+      - coverage_estimate
+
+# Rapports PDF CDC/MMWR
+pdf_reports:
+  - url: "https://www.cdc.gov/mmwr/volumes/72/wr/pdfs/mm7235a1-H.pdf"
+    name: "mmwr_covid_update_2023"
+    category: "mmwr"
+  - url: "https://www.cdc.gov/mmwr/volumes/71/wr/pdfs/mm7146a1-H.pdf"
+    name: "mmwr_influenza_2022"
+    category: "mmwr"
+  - url: "https://www.cdc.gov/mmwr/volumes/70/wr/pdfs/mm7028a1-H.pdf"
+    name: "mmwr_vaccination_2021"
+    category: "mmwr"
+
+# Limites par mode
+modes:
+  sample:
+    max_rows_per_dataset: 1000
+    max_pdf_pages: 5
+    description: "Échantillon réduit pour tests locaux"
+  full:
+    max_rows_per_dataset: null  # Toutes les lignes
+    max_pdf_pages: null
+    description: "Volume complet 5GB+ (téléchargement long)"

@@ -1,0 +1,64 @@
+# Configuration globale du pipeline CDC Lakehouse
+
+project:
+  name: "CDC Data Lakehouse"
+  version: "1.0.0"
+  medallion_layers:
+    - bronze
+    - silver
+    - gold
+
+spark:
+  app_name: "cdc-lakehouse"
+  shuffle_partitions: 8
+  adaptive_enabled: true
+  delta:
+  iceberg:
+    catalog: "local"
+    warehouse: "s3a://cdc-lakehouse/warehouse"
+
+quality:
+  great_expectations:
+    suite_name: "cdc_silver_suite"
+    checkpoint_name: "cdc_silver_checkpoint"
+    fail_on_error: false
+
+monitoring:
+  metrics_port: 8000
+  job_labels:
+    - layer
+    - job_name
+    - status
+
+gold_kpis:
+  tables:
+    - kpi_incidence_by_region
+    - kpi_cases_per_day
+    - kpi_deaths_per_day
+    - kpi_hospitalizations_by_region
+    - kpi_vaccination_vs_cases
+    - kpi_temporal_evolution_by_state
+
+warehouse:
+  schema: "gold"
+  views:
+    - v_kpi_dashboard
+    - v_regional_summary
+    - v_temporal_trends
+
+# API Socrata CDC — pagination et résilience
+socrata:
+  page_size: 50000
+  max_offset: 50000
+  order_column: ":id"
+  max_retries: 5
+  retry_backoff: 2.0
+  modes:
+    sample:
+      pagination_strategy: offset
+      request_timeout: 120
+      rate_limit_delay: 0.3
+    full:
+      pagination_strategy: keyset
+      request_timeout: 300
+      rate_limit_delay: 0.5

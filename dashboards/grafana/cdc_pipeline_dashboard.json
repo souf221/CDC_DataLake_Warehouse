@@ -1,0 +1,90 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "title": "Fichiers lus par couche",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+      "targets": [{
+        "expr": "sum by (layer) (cdc_files_read_total)",
+        "legendFormat": "{{layer}}",
+        "instant": true
+      }],
+      "datasource": {"type": "prometheus", "uid": "prometheus"}
+    },
+    {
+      "title": "Lignes insérées (total)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+      "targets": [{
+        "expr": "sum by (layer, dataset) (cdc_rows_inserted_total)",
+        "legendFormat": "{{layer}}/{{dataset}}"
+      }],
+      "datasource": {"type": "prometheus", "uid": "prometheus"}
+    },
+    {
+      "title": "Lignes rejetées (total)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+      "targets": [{
+        "expr": "sum by (layer, reason) (cdc_rows_rejected_total)",
+        "legendFormat": "{{layer}}/{{reason}}"
+      }],
+      "datasource": {"type": "prometheus", "uid": "prometheus"}
+    },
+    {
+      "title": "Durée des jobs (secondes)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 12},
+      "targets": [{
+        "expr": "sum by (layer, job_name) (cdc_job_duration_seconds_sum) / sum by (layer, job_name) (cdc_job_duration_seconds_count)",
+        "legendFormat": "{{layer}}/{{job_name}}"
+      }],
+      "datasource": {"type": "prometheus", "uid": "prometheus"}
+    },
+    {
+      "title": "Erreurs par couche",
+      "type": "bargauge",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 12},
+      "targets": [{
+        "expr": "sum by (layer) (cdc_errors_total)",
+        "legendFormat": "{{layer}}",
+        "instant": true
+      }],
+      "datasource": {"type": "prometheus", "uid": "prometheus"}
+    },
+    {
+      "title": "Volume traité (bytes)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 20},
+      "targets": [{
+        "expr": "sum by (layer, direction) (cdc_bytes_processed_total)",
+        "legendFormat": "{{layer}}/{{direction}}"
+      }],
+      "datasource": {"type": "prometheus", "uid": "prometheus"}
+    },
+    {
+      "title": "Fraîcheur des données (secondes)",
+      "type": "gauge",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 20},
+      "targets": [{
+        "expr": "max by (layer, dataset) (cdc_data_freshness_seconds)",
+        "legendFormat": "{{layer}}/{{dataset}}",
+        "instant": true
+      }],
+      "datasource": {"type": "prometheus", "uid": "prometheus"}
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["cdc", "lakehouse", "medallion"],
+  "templating": {"list": []},
+  "time": {"from": "now-24h", "to": "now"},
+  "title": "CDC Data Lakehouse - Pipeline Monitoring",
+  "uid": "cdc-lakehouse-monitoring",
+  "version": 2
+}

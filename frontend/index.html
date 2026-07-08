@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CDC Lakehouse — KPI Dashboard</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div>
+      <p class="eyebrow">CDC Data Lakehouse · Couche Gold</p>
+      <h1>Tableau de bord santé publique</h1>
+    </div>
+    <div class="header-meta">
+      <span id="status-badge" class="badge">Chargement…</span>
+      <span id="latest-date" class="muted"></span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="cards" id="summary-cards"></section>
+
+    <section class="grid-2">
+      <article class="panel">
+        <h2>Évolution des cas (agrégé)</h2>
+        <canvas id="cases-chart"></canvas>
+      </article>
+      <article class="panel">
+        <h2>Évolution des décès (agrégé)</h2>
+        <canvas id="deaths-chart"></canvas>
+      </article>
+    </section>
+
+    <section class="grid-2">
+      <article class="panel">
+        <h2>Top États — cas COVID</h2>
+        <canvas id="states-chart"></canvas>
+      </article>
+      <article class="panel">
+        <h2>Résumé régional</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>État</th>
+                <th>Cas</th>
+                <th>Décès</th>
+                <th>Incidence %</th>
+              </tr>
+            </thead>
+            <tbody id="regional-table"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>Dernières données (vue consolidée)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>État</th>
+              <th>Nouveaux cas</th>
+              <th>Nouveaux décès</th>
+              <th>Doses vaccin</th>
+              <th>Taux vaccin %</th>
+            </tr>
+          </thead>
+          <tbody id="dashboard-table"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Source : PostgreSQL <code>gold.*</code> · Pipeline Medallion CDC
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

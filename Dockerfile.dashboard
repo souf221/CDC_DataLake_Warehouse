@@ -1,0 +1,23 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir \
+    fastapi==0.110.0 \
+    uvicorn[standard]==0.27.1 \
+    sqlalchemy==2.0.28 \
+    psycopg2-binary==2.9.9 \
+    pandas==2.2.1 \
+    python-dotenv==1.0.1 \
+    pyyaml==6.0.1
+
+COPY src/api/ ./src/api/
+COPY src/utils/ ./src/utils/
+COPY frontend/ ./frontend/
+
+ENV PYTHONPATH=/app/src
+ENV KPI_DASHBOARD_PORT=8500
+
+EXPOSE 8500
+
+CMD ["python", "-m", "api.kpi_server"]
